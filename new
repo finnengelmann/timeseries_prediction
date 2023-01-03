@@ -1,0 +1,22 @@
+    def get_all_spreads_day(self, data):
+        amount_columns = len(data.columns)
+        count = 1
+
+        prices = np.ravel(data.to_numpy())
+
+        spreads = []
+
+        for price in prices:
+            index = math.ceil(count / amount_columns) * amount_columns
+            other_prices = prices[index:]
+
+            for other in range(len(other_prices)):
+                spread = round(abs(other_prices[other] - price), 3)
+                spreads.append(spread)
+
+            count = count + 1
+
+        spreads = np.ravel(spreads)
+        spreads = spreads[~np.isnan(spreads)]
+        spreads = np.sort(spreads)
+        return spreads
